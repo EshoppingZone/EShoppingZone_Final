@@ -11,14 +11,14 @@
 </head>
 <body>
 	<div>
-		<jsp:include page="home.jsp" />
-	</div>
+	<jsp:include page="home.jsp" />
+</div>
 <h1 align="center">Address</h1>
 	<form action="payment">
 		<table align="center">
 			<tr>
-				<td><label>Customer ID:</label></td>
-				<td><input type="text" name="customerId" readonly="readonly" value="${address.customerId}"></td>
+				<td><label></label></td>
+				<td><input type="text" name="customerId" readonly="readonly" value="${address.customerId}" hidden="hidden"></td>
 			</tr>
 			<tr>
 				<td><label>Fullname:</label></td>

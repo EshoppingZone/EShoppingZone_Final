@@ -1,4 +1,4 @@
-package com.hellokoding.auth.model;
+package com.cg.eshoppingzone.model;
 
 import java.time.LocalDate;
 public class Orders {

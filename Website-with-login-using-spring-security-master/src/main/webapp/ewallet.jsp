@@ -11,7 +11,8 @@
 	<jsp:include page="home.jsp" />
 </div>
 <form action="paymoney">
-	<h3>Wallet Balance : ${wallet}</h3>
+	<h3>Wallet Balance : ${wallet.walletmoney}</h3>
+	<h3>Amount To Be Paid : ${wallet.cartprice}</h3>
 	<input type="submit" value="Click Here to Pay" name="pay">
 	</form>
 </body>

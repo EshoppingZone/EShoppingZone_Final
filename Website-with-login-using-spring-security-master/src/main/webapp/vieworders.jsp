@@ -17,19 +17,19 @@
 	<tr>
 		<th>orderId </th>	
 		<th>orderDate </th>
-		<th>ammountPaid </th>
+		<th>amountPaid </th>
 		<th>modeOfPayment</th>
 		<th>quantity</th>
 	</tr>
 	
-	<details:forEach var="account" items="${orders}">
+	<details:forEach var="orders" items="${orders}">
 	
 	<tr>
-		<td>${account.orderId}</td>
-		<td>${account.orderDate}</td>
-		<td>${account.ammountPaid}</td>
-		<td>${account.modeOfPayment}</td>
-		<td>${account.quantity}</td>
+		<td>${orders.orderId}</td>
+		<td>${orders.orderDate}</td>
+		<td>${orders.ammountPaid}</td>
+		<td>${orders.modeOfPayment}</td>
+		<td>${orders.quantity}</td>
 	</tr>
 	
 	</details:forEach>

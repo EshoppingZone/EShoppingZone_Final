@@ -18,13 +18,11 @@
 	font-size: large;
 	margin-left: 45px;
 }
-
 .search-container input [type=text] {
 	font-size: 17px;
 	border: 1px solid grey;
 	background: #F1F1F1
 }
-
 .search-container button {
 	width: 10%;
 	padding: 6px;
@@ -39,33 +37,27 @@
 	line-height: normal;
 	padding: 11px;
 }
-
 .search-container button:hover {
 	background: #0b7dda;
 }
-
 .search-container ::after {
 	content: "";
 	clear: both;
 	display: table;
 }
-
 #search {
 	float: left;
 	width: 90%;
 	padding: 6px;
 }
-
 .dropbtn {
 	padding: 0.5rem 1rem;
 	margin-left: 3rem;
 }
-
 .dropdown {
 	position: relative;
 	display: inline-block;
 }
-
 .dropdown-content {
 	display: none;
 	position: absolute;
@@ -74,24 +66,100 @@
 	box-shadow: 0px8px16px0pxrgba(0, 0, 0, 0.2);
 	z-index: 1;
 }
-
 .dropdown-content a {
 	color: black;
 	padding: 12px16px;
 	text-decoration: none;
 	display: block;
 }
-
 .dropdown-content a:hover {
 	background-color: #ddd;
 }
-
 .dropdown:hover .dropdown-content {
 	display: block;
 }
-
 .dropdown:hover .dropbtn {
 	background-color: #086cbd;
+}
+.img {
+	background-color: rgb(250, 241, 218);
+	width: 100%;
+	height: 900px;
+	padding-top: 2px;
+	margin-top: 0px;
+}
+.img1 {
+	width: 250px;
+	height: 400px;
+	margin-top: 50px;
+	margin-left: 50px;
+}
+.img2 {
+	width: 250px;
+	height: 400px;
+	margin-top: -400px;
+	margin-left: 420px;
+}
+.img3 {
+	width: 250px;
+	height: 400px;
+	margin-top: -400px;
+	margin-left: 800px;
+}
+.img4 {
+	width: 250px;
+	height: 400px;
+	margin-top: -400px;
+	margin-left: 1150px;
+}
+.img5 {
+	margin-bottom: 70px;
+	margin-left: 50px;
+}
+.img6 {
+	width: 250px;
+	height: 400px;
+	margin-top: -400px;
+	margin-left: 1150px;
+}
+.img7 {
+	width: 250px;
+	height: 400px;
+	margin-top: -400px;
+	margin-left: 800px;
+}
+.img8 {
+	width: 250px;
+	height: 400px;
+	margin-top: -400px;
+	margin-left: 420px;
+}
+p {
+	margin-left: 40px;
+}
+.productName1 {
+	margin-left: 40px;
+}
+.buyNow2 {
+	margin-left: 0px;
+}
+.buyNow3 {
+	margin-left: -30px;
+}
+.buyNow4 {
+	margin-left:-20px;
+}
+.buyNow5 {
+	margin-left: 0px;
+}
+.buyNow6 {
+	margin-left: -40px;
+}
+.buyNow7 {
+	margin-left: -40px;
+}
+.buyNow8 {
+	margin-left: 15px;
 }
 </style>
 </head>
@@ -100,20 +168,19 @@
 	<div class="col-sm-12">
 		<nav class='navbar navbar-expand navbar-light bg-light'>
 			<div class="col-sm-2">
-				<a class='navbar-brand'><img src="assets/images/logo.JPG"
+				<a class='navbar-brand' href="/homepage"><img
+					src="https://github.com/EshoppingZone/Product_images/blob/experimental/logo.JPG?raw=true" 
 					alt="EShoppingZone"></a>
 			</div>
 			<div class="col-sm-3">
 				<ul class='nav nav-pills'>
-					<li><a href="/home">Home</a></li>
+					<li><a href="/homepage">Home</a></li>
 					<li>
 						<div class="dropdown">
 							<button class="btn btn-primary dropbtn">Categories</button>
 							<div class="dropdown-content">
 								<a href="/getProductsByCategory?category=electronics">Electronics</a> 
 								<a href="/getProductsByCategory?category=books">Books&Stationary</a>
-								<a href="/getProductsByCategory?category=clothing">Clothing</a> 
-								<a href="/getProductsByCategory?category=footwear">FootWear</a>
 								<a href="/getProductsByCategory?category=sports">Sports</a> 
 								<a href="/getProductsByCategory?category=kitchen">Home & Kitchen</a> 
 								<a href="/getProductsByCategory?category=bags">Bags & Luggage</a>
@@ -152,7 +219,10 @@
 								<a href="/viewprofile">View Profile</a> 
 								<a href="/yourorders">Your Orders</a>
 								<a href="/yourwallet">View Wallet</a> 
-								<a onclick="document.forms['logoutForm'].submit()">Logout</a>
+								<c:if test="${profile.password!=null}" >
+                                <a onclick="document.forms['logoutForm'].submit()">Logout</a></c:if>
+                                <c:if test="${profile.password==null}" >
+                                <a href="#" onclick="myFunction();document.forms['logoutForm'].submit()">Logout</a></c:if>
 							</div>
 						</div>
         
@@ -167,8 +237,12 @@
 			</div>
 		</nav>
 	</div>
+
 	<script>
-		
+	   function myFunction() {
+	        window.open("https://github.com/logout");
+	        }
+	   
 		$.get("/user", function(data) {
 			$("#user").html(data.userAuthentication.details.name);
 			$(".unauthenticated").hide()

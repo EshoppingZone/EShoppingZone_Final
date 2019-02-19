@@ -134,9 +134,7 @@ body {
               <a href="/login" class="github btn">
                 <i class="fa fa-github"></i> Login with GitHub
                </a>
-              <a href="/linkedin" class="linkedin btn">
-                <i class="fa fa-linkedin"></i> Login with LinkedIn
-              </a>              
+                           
             </div>
       
             <div class="col">
@@ -158,7 +156,7 @@ body {
             <a class='nav-link btn' href="${contextPath}/registration" style="color:white">Sign up</a>
           </div>
           <div class="col">
-            <a class='nav-link btn' href="/forgotpassword" style="color:white">Forgot password?</a>
+            <a class='nav-link btn' style="color:white">Forgot password?</a>
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-package com.hellokoding.auth.model;
+package com.cg.eshoppingzone.model;
 
 public class Items {
 	private String productName;

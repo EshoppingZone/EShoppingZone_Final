@@ -7,19 +7,14 @@
 <title>Insert title here</title>
 </head>
 <body>
-<div>
-		<jsp:include page="home.jsp" />
-	</div>
-	<form action="addmoney">
-	<h3>Add Money to Wallet</h3>
+	<form action="password">
 		<table>
-			
 			<tr>
-				<td>Enter Amount to Add:</td>
-				<td><input type="text" name="money"></td>
+				<td>Enter User Name:</td>
+				<td><input type="text" name="userName"></td>
 			</tr>
 			<tr>
-				<td><input type="submit" value="Addmoney"></td>
+				<td><input type="submit" value="submit"></td>
 			</tr>
 		</table>
 	</form>

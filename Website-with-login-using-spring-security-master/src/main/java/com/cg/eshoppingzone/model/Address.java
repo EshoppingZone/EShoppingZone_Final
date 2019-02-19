@@ -1,4 +1,4 @@
-package com.hellokoding.auth.model;
+package com.cg.eshoppingzone.model;
 
 public class Address {
 	private Integer customerId;

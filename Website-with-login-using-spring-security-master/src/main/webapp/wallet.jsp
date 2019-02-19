@@ -11,7 +11,7 @@
 <div>
 		<jsp:include page="home.jsp" />
 	</div>
-	<h3>Your Current Balance is : ${wallet}</h3>
+	<h3>Your Current Balance is : ${wallet} ${statements.currentBalance}</h3>
 	<a href="/viewstatements">View Statements</a>
 	<table>
 
@@ -24,7 +24,7 @@
 		<th>transaction_type</th>
 	</tr>
 	
-	<details:forEach var="account" items="${statements}">
+	<details:forEach var="account" items="${statements.statements}">
 	
 	<tr>
 		<td>${account.statementId}</td>

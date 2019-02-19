@@ -1,4 +1,4 @@
-package com.hellokoding.auth.model;
+package com.cg.eshoppingzone.model;
 
 import java.util.List;
 import java.util.Map;
@@ -8,6 +8,7 @@ public class Product {
 
 
 	private int productId;
+	private String productType;
 	private String productName;
 	private String category;
 	private Map<Integer, Double> rating;
@@ -21,11 +22,12 @@ public class Product {
 
 	}
 
-	public Product(int productId, String productName, String category, Map<Integer, Double> rating,
+	public Product(int productId,String productType, String productName, String category, Map<Integer, Double> rating,
 			Map<Integer, String> review, List<String> image, double price, String description,
 			Map<String, String> specification) {
 		super();
 		this.productId = productId;
+		this.productType = productType;
 		this.productName = productName;
 		this.category = category;
 		this.rating = rating;
@@ -42,6 +44,14 @@ public class Product {
 
 	public void setProductId(int productId) {
 		this.productId = productId;
+	}
+
+	public String getProductType() {
+		return productType;
+	}
+
+	public void setProductType(String productType) {
+		this.productType = productType;
 	}
 
 	public String getProductName() {
@@ -110,9 +120,9 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return "Product [productId=" + productId + ", productName=" + productName + ", category=" + category
-				+ ", rating=" + rating + ", review=" + review + ", image=" + image + ", price=" + price
-				+ ", description=" + description + ", specification=" + specification + "]";
+		return "Product [productId=" + productId + ", productType=" + productType + ", productName=" + productName
+				+ ", category=" + category + ", rating=" + rating + ", review=" + review + ", image=" + image
+				+ ", price=" + price + ", description=" + description + ", specification=" + specification + "]";
 	}
 
 	@Override
@@ -127,6 +137,7 @@ public class Product {
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + productId;
 		result = prime * result + ((productName == null) ? 0 : productName.hashCode());
+		result = prime * result + ((productType == null) ? 0 : productType.hashCode());
 		result = prime * result + ((rating == null) ? 0 : rating.hashCode());
 		result = prime * result + ((review == null) ? 0 : review.hashCode());
 		result = prime * result + ((specification == null) ? 0 : specification.hashCode());
@@ -166,6 +177,11 @@ public class Product {
 				return false;
 		} else if (!productName.equals(other.productName))
 			return false;
+		if (productType == null) {
+			if (other.productType != null)
+				return false;
+		} else if (!productType.equals(other.productType))
+			return false;
 		if (rating == null) {
 			if (other.rating != null)
 				return false;
@@ -183,5 +199,7 @@ public class Product {
 			return false;
 		return true;
 	}
+
+	
 
 }

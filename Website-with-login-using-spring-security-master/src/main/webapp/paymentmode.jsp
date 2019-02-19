@@ -11,7 +11,7 @@
 		<jsp:include page="home.jsp" />
 	</div>
 
-	<p><input type="text" name="customerId" readonly="readonly" value="${customerId}"></p>
+	<p><input type="hidden" name="customerId" readonly="readonly" value="${customerId}"></p>
 	<div class="dropdown" align="center">
 	
 		<h4>Select payment mode to proceed :</h4><button class="btn btn-primary dropbtn">Payment Mode</button>

@@ -15,7 +15,7 @@
 <h3>Order Summary</h3><br>
 <h4>Customer Details :</h4>
 	<p>
-	Customer Id : ${order.useraddress.customerId}<br>
+	
 	Full Name : ${order.useraddress.fullName}<br>
 	Mobile Number : ${order.useraddress.mobileNumber}<br>
 	Address : <br> 
@@ -32,6 +32,7 @@
 	Order Date : ${order.orders.orderDate}<br>
 	Quantity : ${order.orders.quantity}<br>
 	Amount : ${order.orders.ammountPaid}<br>
+	Mode oF Payment: ${order.orders.modeOfPayment}<br>
 	<%-- Order Status : ${order.orders.orderStatus}<br> --%>
 	
 	</div>

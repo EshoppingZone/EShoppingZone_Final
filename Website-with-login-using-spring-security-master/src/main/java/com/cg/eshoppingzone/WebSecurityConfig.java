@@ -1,4 +1,4 @@
-package com.hellokoding.auth;
+package com.cg.eshoppingzone;
 
 import java.security.Principal;
 import java.util.LinkedHashMap;

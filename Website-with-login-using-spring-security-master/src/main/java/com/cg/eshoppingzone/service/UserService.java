@@ -1,6 +1,6 @@
-package com.hellokoding.auth.service;
+package com.cg.eshoppingzone.service;
 
-import com.hellokoding.auth.model.User;
+import com.cg.eshoppingzone.model.User;
 
 public interface UserService {
     void save(User user);

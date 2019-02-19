@@ -1,4 +1,4 @@
-package com.hellokoding.auth;
+package com.cg.eshoppingzone;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,4 +16,6 @@ public class WebApplication extends SpringBootServletInitializer {
     public static void main(String[] args) throws Exception {
         SpringApplication.run(WebApplication.class, args);
     }
+    
+    
 }

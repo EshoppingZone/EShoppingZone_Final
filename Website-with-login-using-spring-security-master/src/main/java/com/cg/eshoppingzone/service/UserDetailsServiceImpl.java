@@ -1,8 +1,9 @@
-package com.hellokoding.auth.service;
+package com.cg.eshoppingzone.service;
 
-import com.hellokoding.auth.model.Role;
-import com.hellokoding.auth.model.User;
-import com.hellokoding.auth.repository.UserRepository;
+import com.cg.eshoppingzone.model.Role;
+import com.cg.eshoppingzone.model.User;
+import com.cg.eshoppingzone.repository.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

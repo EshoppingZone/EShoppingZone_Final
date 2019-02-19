@@ -111,7 +111,7 @@
 					<td></td>
 					<td></td>
 					<td></td>
-					<td id="finalAmount"></td>
+					<td id="finalAmount" >${cart.totalPrice}</td>
 				</tr>
 				<tr>
 					<td style="font-style: italic; font-weight: bold">Proceed To

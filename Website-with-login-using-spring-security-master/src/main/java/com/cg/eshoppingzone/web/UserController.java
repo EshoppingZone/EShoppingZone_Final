@@ -1,19 +1,5 @@
-package com.hellokoding.auth.web;
+package com.cg.eshoppingzone.web;
 
-import com.hellokoding.auth.model.Address;
-import com.hellokoding.auth.model.Cart;
-import com.hellokoding.auth.model.Ewallet;
-import com.hellokoding.auth.model.Items;
-import com.hellokoding.auth.model.Orders;
-import com.hellokoding.auth.model.Product;
-import com.hellokoding.auth.model.Statement;
-import com.hellokoding.auth.model.User;
-import com.hellokoding.auth.model.UserProfile;
-import com.hellokoding.auth.service.SecurityService;
-import com.hellokoding.auth.service.UserService;
-import com.hellokoding.auth.validator.UserValidator;
-
-import java.nio.file.attribute.UserPrincipal;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,9 +14,21 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.cg.eshoppingzone.model.Address;
+import com.cg.eshoppingzone.model.Cart;
+import com.cg.eshoppingzone.model.Ewallet;
+import com.cg.eshoppingzone.model.Items;
+import com.cg.eshoppingzone.model.Orders;
+import com.cg.eshoppingzone.model.Product;
+import com.cg.eshoppingzone.model.Statement;
+import com.cg.eshoppingzone.model.User;
+import com.cg.eshoppingzone.model.UserProfile;
+import com.cg.eshoppingzone.service.SecurityService;
+import com.cg.eshoppingzone.service.UserService;
+import com.cg.eshoppingzone.validator.UserValidator;
 
 @Controller
 public class UserController {
@@ -50,11 +47,18 @@ public class UserController {
 
 	private static UserProfile currentProfile = new UserProfile();
 
+	private static UserProfile profile = new UserProfile();
+	
 	private static Address staticAddress = new Address();
 
 	private Product product;
 
 
+	@RequestMapping("/homepage")
+	public String homePage()
+	{
+		return "homepage";
+	}
 	@RequestMapping("/profilecreation")
 	public String creatingProfile(@RequestParam("mobilenumber") Long mobilenumber,
 			@RequestParam("email") String emailId, @RequestParam("password") String password) {
@@ -95,10 +99,34 @@ public class UserController {
 		return new ModelAndView("viewprofile","profile",profile);
 	}
 	
+	@RequestMapping("/updateProfile")
+	public ModelAndView updateprofile()
+	{
+		UserProfile profile=restTemplate.getForObject("http://localhost:8080/profiles/" + currentProfile.getProfileId(),UserProfile.class);
+		System.out.println("profile:"+profile.toString());
+		return new ModelAndView("updateProfile","profile",profile);
+	}
+	
+	@RequestMapping("/updateDetails")
+	public ModelAndView updateDetails(@RequestParam("email") String email,
+			@RequestParam("mobile") Long mobilenumber,
+			@RequestParam("gender") String gender)
+	{
+		UserProfile profile=restTemplate.getForObject("http://localhost:8080/profiles/" + currentProfile.getProfileId(),UserProfile.class);
+		profile.setMobileNumber(mobilenumber);
+		profile.setEmailId(email);
+		profile.setGender(gender);
+		restTemplate.put("http://localhost:8080/profiles",profile,UserProfile.class);
+		System.out.println("profile:"+profile.toString());
+		return new ModelAndView("viewprofile","profile",profile);
+	}
+	
+	
 	@RequestMapping("/yourorders")
 	public ModelAndView viewOrders()
 	{
-		List<Orders> orders=restTemplate.getForObject("http://10.246.92.126:9090/orders/" + currentProfile.getProfileId(),List.class);
+		@SuppressWarnings("unchecked")
+		List<Orders> orders=restTemplate.getForObject("http://localhost:9090/orders/order/" + currentProfile.getProfileId(),List.class);
 		System.out.println("orders"+orders);
 		return new ModelAndView("vieworders","orders",orders);
 	}
@@ -114,9 +142,12 @@ public class UserController {
 	@RequestMapping("/viewstatements")
 	public ModelAndView viewStatements()
 	{
+		Double balance = restTemplate.getForObject("http://localhost:8426/wallets/"+ currentProfile.getProfileId(),Double.class);
 		List<Statement> statements = restTemplate.getForObject("http://localhost:8426/wallets/statements/"+ currentProfile.getProfileId(),List.class);
-		
-		return new ModelAndView("wallet","statements",statements);
+		Ewallet wallet = new Ewallet();
+		wallet.setCurrentBalance(balance);
+		wallet.setStatements(statements);
+		return new ModelAndView("wallet","statements",wallet);
 	}
 
 	@RequestMapping("/searchproduct")
@@ -128,11 +159,13 @@ public class UserController {
 	}
 
 	@RequestMapping("/getProductsByCategory")
-	public ModelAndView electronicsCategory(@RequestParam("category") String category) {
-		List productsList = restTemplate.getForObject("http://localhost:8989/products/category/" + category,
-				List.class);
-		return new ModelAndView("ProductsByCategory", "products", productsList);
-	}
+    public ModelAndView getCategory(@RequestParam("category") String category, Model model) {
+ 
+        List product = restTemplate.getForObject("http://localhost:8989/products/category/" + category, List.class,
+                category);
+        return new ModelAndView("ProductsByCategory", "productList", product);
+ 
+    }
 
 	@RequestMapping("/shoppingcart")
 	public ModelAndView shoppingCart() {
@@ -143,7 +176,7 @@ public class UserController {
 	}
 
 	@RequestMapping("/addToCart")
-	public ModelAndView addToCart(@RequestParam("productId") int productId) {
+	public ModelAndView addToCart(@RequestParam("quantity") int quantity,@RequestParam("productId") int productId) {
 		if(currentProfile.getProfileId()==0)
 		{
 			return new ModelAndView("login");
@@ -182,7 +215,7 @@ public class UserController {
 
 		restTemplate.put("http://localhost:9091/carts", cart);
 
-		return new ModelAndView("cartDetails", "cart", cart);
+		return new ModelAndView("cart", "cart", cart);
 	}
 
 	@RequestMapping("/remove")
@@ -192,6 +225,7 @@ public class UserController {
 		System.out.println("Quantity is : " + quantity);
 		Cart cart = restTemplate.getForObject("http://localhost:9091/carts/" + currentProfile.getProfileId(),
 				Cart.class);
+		
 		List<Items> itemsInCart = cart.getItems();
 		System.out.println("Items present now" + itemsInCart);
 		for (Items item : itemsInCart) {
@@ -207,8 +241,11 @@ public class UserController {
 	}
 
 	@RequestMapping("/removeProduct")
-	public String addressForm(@RequestParam("productName") String[] productName,
+	public ModelAndView addressForm(@RequestParam("productName") String[] productName,
 			@RequestParam("quantity") int[] quantity, @RequestParam("price") double[] price) {
+		
+		
+		
 		for (int i = 0; i < productName.length; i++) {
 			System.out.println("Products" + productName[i]);
 		}
@@ -248,7 +285,9 @@ public class UserController {
 		 * System.out.println("Details are not same"); } else
 		 * System.out.println("Details are  same"); }
 		 */
-		return "address";
+		List<Address> address = restTemplate.getForObject("http://localhost:9090/orders/"+currentProfile.getProfileId(),List.class);
+		System.out.println(address.toString());
+		return new ModelAndView("address","savedAddress",address);
 	}
 
 	@RequestMapping("/address")
@@ -258,9 +297,10 @@ public class UserController {
 		int customerId = cart.getCartId();
 		address.setCustomerId(customerId);
 		staticAddress = address;
-		restTemplate.postForEntity("http://10.246.92.126:9090/orders/address", address, null);
+		restTemplate.postForEntity("http://localhost:9090/orders/address", address, null);
+		System.out.println("address"+address.getFlatNumber());
 		Address confirmAddress = address;
-		return new ModelAndView("placeorder", "address", confirmAddress);
+		return new ModelAndView("placeorder", "address", staticAddress);
 	}
 
 	@RequestMapping("/payment")
@@ -271,10 +311,12 @@ public class UserController {
 
 	@RequestMapping("/codpayment")
 	public ModelAndView cashOnDelivery() {
+		
 		Cart cart = restTemplate.getForObject("http://localhost:9091/carts/" + currentProfile.getProfileId(),
 				Cart.class);
-		restTemplate.postForObject("http://10.246.92.126:9090/orders", cart, Cart.class);
-		Orders order = restTemplate.getForObject("http://10.246.92.126:9090/orders/orderId", Orders.class);
+		restTemplate.postForObject("http://localhost:9090/orders/cod", cart, Cart.class);
+		Orders order = restTemplate.getForObject("http://localhost:9090/orders/orderId", Orders.class);
+		order.setModeOfPayment("Cash on Delivery");
 		Cart emptyCart = new Cart();
 		restTemplate.postForObject("http://localhost:9091/carts/" + currentProfile.getProfileId(), emptyCart,
 				Cart.class);
@@ -288,9 +330,14 @@ public class UserController {
 	public ModelAndView proceedToPay() {
 		Double wallet = restTemplate.getForObject("http://localhost:8426/wallets/" + currentProfile.getProfileId(),
 				Double.class);
-		// System.out.println("wallet:"+wallet);
-		// wallet.getCurrentBalance();
-		return new ModelAndView("ewallet", "wallet", wallet);
+		Cart cart = restTemplate.getForObject("http://localhost:9091/carts/" + currentProfile.getProfileId(),
+				Cart.class);
+		double totalPrice = cart.getTotalPrice();
+		System.out.println("price:"+totalPrice);
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("cartprice",totalPrice);
+		model.put("walletmoney",wallet);
+		return new ModelAndView("ewallet", "wallet", model);
 	}
 
 	@RequestMapping("/paymoney")
@@ -303,8 +350,8 @@ public class UserController {
 				Double.class);
 		double walletBalance = wallet;
 		if (walletBalance > totalPrice) {
-			restTemplate.postForObject("http://10.246.92.126:9090/orders", cart, Cart.class);
-			Orders order = restTemplate.getForObject("http://10.246.92.126:9090/orders/orderId", Orders.class);
+			restTemplate.postForObject("http://localhost:9090/orders/onlinepay", cart, Cart.class);
+			Orders order = restTemplate.getForObject("http://localhost:9090/orders/orderId", Orders.class);
 			System.out.println(order);
 			int orderId = order.getOrderId();
 			restTemplate.put("http://localhost:8426/wallets/pay/" + currentProfile.getProfileId() + "?currentBalance="
@@ -332,9 +379,17 @@ public class UserController {
 				null);
 		Double updatedBalance = restTemplate
 				.getForObject("http://localhost:8426/wallets/" + currentProfile.getProfileId(), Double.class);
-		System.out.println("balance:" + updatedBalance);
-		return new ModelAndView("ewallet", "wallet", updatedBalance);
+		Cart cart = restTemplate.getForObject("http://localhost:9091/carts/" + currentProfile.getProfileId(),
+				Cart.class);
+		double totalPrice = cart.getTotalPrice();
+		System.out.println("price:"+totalPrice);
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("cartprice",totalPrice);
+		model.put("walletmoney",updatedBalance);
+		return new ModelAndView("ewallet", "wallet", model);
 	}
+	
+	 
 	
  ///////////////////////////////////////////////////////////   
     
@@ -382,9 +437,12 @@ public class UserController {
 
         if (logout != null)
         {
+        
+        		  
         	currentProfile.setProfileId(0);
             model.addAttribute("message", "You have been logged out successfully.");
             return "home";
+        	
         }
      
         return "login";
@@ -392,18 +450,32 @@ public class UserController {
     
     
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
-    public String welcome(Model model,Principal principal) {
+    public ModelAndView welcome(Model model,Principal principal) {
     	
-    	if(principal!=null)
-    	{
-    		String username = principal.getName();
-    		System.out.println(username);
-    		UserProfile profile = restTemplate.getForObject("http://localhost:8080/profiles/getbyusernames/"+username,
-    				UserProfile.class);
-    		currentProfile.setProfileId(profile.getProfileId());
-
-    	}
-    	return "home";
+		
+		  if(principal!=null) { 
+		String username = principal.getName();
+		  System.out.println(username);
+		 profile = restTemplate.getForObject("http://localhost:8080/profiles/getbyusernames/"+
+		  username, UserProfile.class);
+		  if(profile == null)
+			{
+				  UserProfile profilegit = new UserProfile();
+				  profilegit.setFullName(username);
+					profile = restTemplate.postForObject("http://localhost:8080/profiles/customers", profilegit,
+							UserProfile.class);
+					restTemplate.postForEntity("http://localhost:9091/carts/" +profile.getProfileId(), null, Cart.class);
+					restTemplate.postForEntity("http://localhost:8426/wallets/" +profile.getProfileId(), null, null);
+					 currentProfile.setProfileId(profile.getProfileId());
+			}
+		  else
+		  {
+		  currentProfile.setProfileId(profile.getProfileId());
+		  }
+		 
+		  }
+		 
+		  return new ModelAndView("home","profile",profile);
     			}
     
 	@RequestMapping("/homelogin")
@@ -428,5 +500,16 @@ public class UserController {
 		System.out.println(currentProfile.getProfileId());
 		System.out.println(profile.getMobileNumber() + " mobile:");
 	}
+	
+	@RequestMapping("/searchProducts")
+    public String searchProduct(@RequestParam int productId,Model model ) {
+        System.out.println(productId);
+        Product product = restTemplate.getForObject("http://localhost:8989/products/" + productId, Product.class);
+        System.out.println("106"+ product);
+        model.addAttribute(product);
+    return "AllProducts";
+    }
+	
+	
 
 }
